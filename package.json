@@ -1,0 +1,62 @@
+{
+  "name": "perlin-quest",
+  "version": "1.0.0",
+  "description": "A 3D game using React Three Fiber and Perlin noise",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "start": "webpack serve --mode development --open",
+    "build": "webpack --mode production",
+    "clean": "rm -rf dist node_modules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adam404/perlin-quest.git"
+  },
+  "author": "Adam Scott",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adam404/perlin-quest/issues"
+  },
+  "homepage": "https://github.com/adam404/perlin-quest#readme",
+  "dependencies": {
+    "@react-three/drei": "^9.114.0",
+    "@react-three/fiber": "^8.17.9",
+    "copy-webpack-plugin": "^12.0.2",
+    "nth-check": "^2.1.1",
+    "perlin-noise": "^0.0.1",
+    "postcss": "^8.4.47",
+    "postcss-loader": "^8.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/three": "0.169.0",
+    "dotenv-webpack": "^8.1.0",
+    "typescript": "5.6.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
