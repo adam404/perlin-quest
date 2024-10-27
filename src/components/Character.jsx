@@ -35,11 +35,17 @@ const Character = forwardRef(({ onLoad, currentAnimation }, ref) => {
   const setAnimationState = useMemo(() => (state) => {
     if (!actions || state === animationState) return;
     if (currentAction) {
-      currentAction.fadeOut(0.2);
+      currentAction.fadeOut(0.001);
     }
     const newAction = actions[state];
     if (newAction) {
-      newAction.reset().fadeIn(0.2).play();
+      if (state === 'Idle') {
+        // Add a delay for the Idle animation
+        newAction.reset().setEffectiveTimeScale(1).setEffectiveWeight(1);
+        newAction.play(); // Start at 0.5 seconds into the animation
+      } else {
+        newAction.reset().fadeIn(0.1).play();
+      }
       setCurrentAction(newAction);
       setAnimationStateValue(state);
     }
@@ -100,7 +106,7 @@ const Character = forwardRef(({ onLoad, currentAnimation }, ref) => {
       targetRotationRef.current.y = Math.atan2(-direction.current.x, -direction.current.z);
 
       // Smoothly interpolate current rotation towards target rotation
-      const rotationSpeed = 3; // Reduced from 5 to 3 for smoother turning
+      const rotationSpeed = 3;
       group.current.rotation.y = THREE.MathUtils.lerp(
         group.current.rotation.y,
         targetRotationRef.current.y,
@@ -116,14 +122,29 @@ const Character = forwardRef(({ onLoad, currentAnimation }, ref) => {
       if (animationState !== 'Run') {
         setAnimationState('Run');
       }
-    } else if (animationState !== 'Idle') {
-      setAnimationState('Idle');
+    } else {
+      velocity.current.set(0, 0, 0);
+      if (animationState !== 'Idle') {
+        // Add a small delay before switching to Idle
+        setTimeout(() => {
+          if (direction.current.lengthSq() === 0) {
+            setAnimationState('Idle');
+          }
+        }, 100);
+      }
     }
 
+    // Expose velocity for camera look-ahead
+    group.current.velocity = velocity.current.clone();
+
     const terrainHeight = terrainHeightAtPosition(position.current.x, position.current.z);
+    const targetY = terrainHeight + characterHeight.current / 2;
+    const currentY = group.current.position.y;
+    const smoothY = THREE.MathUtils.lerp(currentY, targetY, 0.1);
+
     group.current.position.set(
       position.current.x,
-      terrainHeight + characterHeight.current / 2, // Add half of the character's height
+      smoothY,
       position.current.z
     );
   });
